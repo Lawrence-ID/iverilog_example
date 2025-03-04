@@ -116,11 +116,11 @@ module RR_Arbiter_with_ack #(
             mask <= {REQ_WIDTH{1'b0}};
         end
         else if (o_valid && (o_grant == i_ack)) begin
-            mask <= (req_masked == {REQ_WIDTH{1'b0}}) ? req_unmask_exit_higher_prio_reqs : req_mask_exit_higher_prio_reqs;
+            mask <= (|req_masked == 1'b0) ? req_unmask_exit_higher_prio_reqs : req_mask_exit_higher_prio_reqs;
         end
     end
 
-    assign o_grant = (req_masked == {REQ_WIDTH{1'b0}}) ? req_unmask_grant : req_mask_grant;
+    assign o_grant = (|req_masked == 1'b0) ? req_unmask_grant : req_mask_grant;
     assign o_valid = |o_grant;
 
     `probe(i_req);
