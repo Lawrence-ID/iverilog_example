@@ -32,6 +32,7 @@ module ClockOddDivider #(
     input reset_n,
     output o_clk_divided
 );
+// assert(N % 2 == 1);
 
 reg [$clog2(N) - 1 : 0] cnt;
 always @(posedge clock or negedge reset_n) begin
