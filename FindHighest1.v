@@ -22,6 +22,16 @@ initial begin
     #10 din <= 16'h20;
     #10 din <= 16'h40;
     #10 din <= 16'h80;
+    #10 din <= 16'h00;
+    #10 din <= 16'h0100;
+    #10 din <= 16'h02f1;
+    #10 din <= 16'h0431;
+    #10 din <= 16'h08ac;
+    #10 din <= 16'h00;
+    #10 din <= 16'h1020;
+    #10 din <= 16'h2040;
+    #10 din <= 16'h4100;
+    #10 din <= 16'h8030;
     #20 $finish;
 end
 
@@ -57,7 +67,7 @@ always @(*) begin
         4'b001?: A0 = 2'b01;
         4'b01??: A0 = 2'b10;
         4'b1???: A0 = 2'b11;
-        default: A0 = 2'bxx;
+        default: A0 = 2'b00;
     endcase
 end
 
@@ -67,7 +77,7 @@ always @(*) begin
         4'b001?: A1 = 2'b01;
         4'b01??: A1 = 2'b10;
         4'b1???: A1 = 2'b11;
-        default: A1 = 2'bxx;
+        default: A1 = 2'b00;
     endcase
 end
 
@@ -77,7 +87,7 @@ always @(*) begin
         4'b001?: A2 = 2'b01;
         4'b01??: A2 = 2'b10;
         4'b1???: A2 = 2'b11;
-        default: A2 = 2'bxx;
+        default: A2 = 2'b00;
     endcase
 end
 
@@ -87,7 +97,7 @@ always @(*) begin
         4'b001?: A3 = 2'b01;
         4'b01??: A3 = 2'b10;
         4'b1???: A3 = 2'b11;
-        default: A3 = 2'bxx;
+        default: A3 = 2'b00;
     endcase
 end
 
