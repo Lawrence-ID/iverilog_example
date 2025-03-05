@@ -66,8 +66,8 @@ module SP_Arbiter#(
     output [REQ_WIDTH - 1 : 0] o_grant,
     output [REQ_WIDTH - 1 : 0] o_exit_higher_prio_reqs
 );
-    assign o_grant = i_req & (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
-    assign o_exit_higher_prio_reqs = i_req ^ (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
+    assign o_grant = i_req & (~i_req + {{REQ_WIDTH-1{1'b0}}, 1'b1});
+    assign o_exit_higher_prio_reqs = i_req ^ (~i_req + {{REQ_WIDTH-1{1'b0}}, 1'b1});
 
     // `probe(i_req);	// Sub-modules can also have `probe()
     // `probe(o_grant);
