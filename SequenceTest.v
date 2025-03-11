@@ -16,12 +16,19 @@ module top_module ();
         #10 rst <= 1; din <= 0;
         #10 din <= 1;
         #10 din <= 0;
-        #10 din <= 1;
-        #10 din <= 1;
-        #10 din <= 1;
         #10 din <= 0;
         #10 din <= 1;
+        #10 din <= 0;
+        #10 din <= 0;
         #10 din <= 1;
+        #10 din <= 0;
+        #10 din <= 0;
+        #10 din <= 1;
+        #10 din <= 0;
+        #10 din <= 0;
+        #10 din <= 1;
+        #10 din <= 0;
+        #10 din <= 0;
         #20 $finish;
     end
 
@@ -36,15 +43,20 @@ module top_module ();
 endmodule
 
 module SeqenceTest #(
-    parameter N = 4
+    parameter N = 5
 )(
     input clk,
     input rst_n,
     input din,
-    output dout
+    output reg dout
 );
     reg [N-1:0] c_s, n_s;
-    parameter IDLE = 4'b0000, A = 4'b0001, B = 4'b0010, C = 4'b0100;
+    parameter IDLE    = 5'b00000;
+    parameter S_1     = 5'b00001;
+    parameter S_10    = 5'b00010;
+    parameter S_100   = 5'b00100;
+    parameter S_1001  = 5'b01000;
+    parameter S_10010 = 5'b10000;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -59,41 +71,67 @@ module SeqenceTest #(
         case (c_s)
             IDLE: begin
                 if (din == 1'b1) begin
-                    n_s = A;
+                    n_s = S_1;
                 end
                 else begin
                     n_s = IDLE;
                 end
             end
-            A: begin
+            S_1: begin
                 if (din == 1'b0) begin
-                    n_s = B;
+                    n_s = S_10;
                 end
                 else begin
-                    n_s = A;
+                    n_s = S_1;
                 end
             end
-            B: begin
-                if (din == 1'b1) begin
-                    n_s = C;
+            S_10: begin
+                if (din == 1'b0) begin
+                    n_s = S_100;
                 end
                 else begin
-                    n_s = B;
+                    n_s = S_1;
                 end
             end
-            C: begin
+            S_100: begin
                 if (din == 1'b1) begin
+                    n_s = S_1001;
+                end
+                else begin
                     n_s = IDLE;
                 end
+            end
+            S_1001: begin
+                if (din == 1'b0) begin
+                    n_s = S_10010;
+                end
                 else begin
-                    n_s = C;
+                    n_s = S_1;
+                end
+            end
+            S_10010: begin
+                if (din == 1'b0) begin
+                    n_s = S_100;
+                end
+                else begin
+                    n_s = S_1;
                 end
             end
             default: n_s = IDLE;
         endcase
     end
 
-    assign dout = c_s == C && din == 1'b1;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            dout <= 1'b0;
+        end
+        else if (n_s == S_10010) begin
+            dout <= 1'b1;
+        end
+        else begin
+            dout <= 1'b0;
+        end
+    end
     
     `probe(c_s);
     `probe(n_s);
