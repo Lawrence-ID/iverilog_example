@@ -174,7 +174,8 @@ module SynFifoWithDualPortRamUseCnt #(
 
 localparam ADDR_WIDTH = $clog2(DEEPTH);
 
-reg [ADDR_WIDTH-1:0] fifo_cnt, wptr, rptr;
+reg [ADDR_WIDTH:0] fifo_cnt;
+reg [ADDR_WIDTH-1:0] wptr, rptr;
 
 assign wfull = fifo_cnt == DEEPTH;
 assign rempty = fifo_cnt == 0;
