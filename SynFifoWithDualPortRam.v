@@ -182,7 +182,7 @@ assign rempty = fifo_cnt == 0;
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        fifo_cnt <= {ADDR_WIDTH{1'b0}};
+        fifo_cnt <= {(ADDR_WIDTH+1){1'b0}};
     end
     else begin
         case ({wen && !wfull, ren && !rempty})
