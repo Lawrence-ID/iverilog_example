@@ -129,7 +129,7 @@ always @(posedge clk or negedge rst_n) begin
         else if(ram_wen && wptr[ADDR_WIDTH-1:0] + 1 == DEEPTH) begin
             wptr <= {~wptr[ADDR_WIDTH], {ADDR_WIDTH{1'b0}}};
         end
-            
+
         if(ram_ren && rptr[ADDR_WIDTH-1:0] + 1 != DEEPTH) begin
             rptr <= rptr + 1;
         end 
@@ -175,10 +175,6 @@ module SynFifoWithDualPortRamUseCnt #(
 localparam ADDR_WIDTH = $clog2(DEEPTH);
 
 reg [ADDR_WIDTH:0] fifo_cnt;
-reg [ADDR_WIDTH-1:0] wptr, rptr;
-
-assign wfull = fifo_cnt == DEEPTH;
-assign rempty = fifo_cnt == 0;
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
@@ -192,6 +188,8 @@ always @(posedge clk or negedge rst_n) begin
         endcase
     end
 end
+
+reg [ADDR_WIDTH-1:0] wptr, rptr;
 
 always @(posedge clk or negedge rst_n) begin
     if(!rst_n) begin
@@ -231,5 +229,8 @@ u_DualPortRam (
     .raddr    	(rptr  ),
     .rdata    	(rdata )
 );
+
+assign wfull = fifo_cnt == DEEPTH;
+assign rempty = fifo_cnt == 0;
 
 endmodule
