@@ -123,19 +123,19 @@ always @(posedge clk or negedge rst_n) begin
         rptr <= {(ADDR_WIDTH+1){1'b0}};
     end
     else begin
-        if(ram_wen && wptr[ADDR_WIDTH-1:0] + 1 != DEEPTH) begin
-            wptr <= wptr + 1;
-        end 
-        else if(ram_wen && wptr[ADDR_WIDTH-1:0] + 1 == DEEPTH) begin
+        if(ram_wen && wptr[ADDR_WIDTH-1:0] == DEEPTH - 1) begin
             wptr <= {~wptr[ADDR_WIDTH], {ADDR_WIDTH{1'b0}}};
         end
-
-        if(ram_ren && rptr[ADDR_WIDTH-1:0] + 1 != DEEPTH) begin
-            rptr <= rptr + 1;
+        else if(ram_wen && wptr[ADDR_WIDTH-1:0] != DEEPTH - 1) begin
+            wptr <= wptr + 1;
         end 
-        else if(ram_ren && rptr[ADDR_WIDTH-1:0] + 1 == DEEPTH) begin
+
+        if(ram_ren && rptr[ADDR_WIDTH-1:0] == DEEPTH - 1) begin
             rptr <= {~rptr[ADDR_WIDTH], {ADDR_WIDTH{1'b0}}};
         end
+        else if(ram_ren && rptr[ADDR_WIDTH-1:0] != DEEPTH - 1) begin
+            rptr <= rptr + 1;
+        end 
     end
 end
 
@@ -198,7 +198,7 @@ always @(posedge clk or negedge rst_n) begin
     end
     else begin
         if (wen && !wfull) begin
-            if (wptr + 1 == DEEPTH) begin 
+            if (wptr == DEEPTH - 1) begin 
                 wptr <= {ADDR_WIDTH{1'b0}};
             end
             else begin
@@ -207,7 +207,7 @@ always @(posedge clk or negedge rst_n) begin
         end
 
         if(ren && !rempty) begin
-            if (rptr + 1 == DEEPTH) begin 
+            if (rptr == DEEPTH - 1) begin 
                 rptr <= {ADDR_WIDTH{1'b0}};
             end
             else begin
