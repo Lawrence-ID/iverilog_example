@@ -1,7 +1,7 @@
 module top_module ();
 	reg clk=0;
     reg [7:0] i_req;
-    wire [7:0] o_grant, o_exit_higher_prio_reqs;
+    wire [7:0] o_grant, o_exist_higher_prio_reqs;
 	always #5 clk = ~clk;  // Create clock with period=10
 	initial `probe_start;   // Start the timing diagram
 
@@ -22,7 +22,7 @@ module top_module ();
     ) sp_arb (
         .i_req (i_req),
         .o_grant(o_grant),
-        .o_exit_higher_prio_reqs(o_exit_higher_prio_reqs)
+        .o_exist_higher_prio_reqs(o_exist_higher_prio_reqs)
     );
 
 endmodule
@@ -32,13 +32,13 @@ module SP_Arbiter#(
 )(
     input [REQ_WIDTH - 1 : 0] i_req,
     output [REQ_WIDTH - 1 : 0] o_grant,
-    output [REQ_WIDTH - 1 : 0] o_exit_higher_prio_reqs
+    output [REQ_WIDTH - 1 : 0] o_exist_higher_prio_reqs
 );
     assign o_grant = i_req & (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
-    assign o_exit_higher_prio_reqs = i_req ^ (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
+    assign o_exist_higher_prio_reqs = i_req ^ (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
 
     `probe(i_req);	// Sub-modules can also have `probe()
     `probe(o_grant);
-    `probe(o_exit_higher_prio_reqs);
+    `probe(o_exist_higher_prio_reqs);
 endmodule
 

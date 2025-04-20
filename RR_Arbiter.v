@@ -45,14 +45,14 @@ module SP_Arbiter#(
 )(
     input [REQ_WIDTH - 1 : 0] i_req,
     output [REQ_WIDTH - 1 : 0] o_grant,
-    output [REQ_WIDTH - 1 : 0] o_exit_higher_prio_reqs
+    output [REQ_WIDTH - 1 : 0] o_exist_higher_prio_reqs
 );
     assign o_grant = i_req & (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
-    assign o_exit_higher_prio_reqs = i_req ^ (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
+    assign o_exist_higher_prio_reqs = i_req ^ (~i_req + {{REQ_WIDTH - 1{1'b0}}, 1'b1});
 
     // `probe(i_req);	// Sub-modules can also have `probe()
     // `probe(o_grant);
-    // `probe(o_exit_higher_prio_reqs);
+    // `probe(o_exist_higher_prio_reqs);
 endmodule
 
 // No handshaking mechanism between master and slave
@@ -69,17 +69,17 @@ module RR_Arbiter #(
     wire [REQ_WIDTH-1 : 0] req_masked = mask & i_req;
     
     wire [REQ_WIDTH-1 : 0] req_unmask_grant;
-    wire [REQ_WIDTH-1 : 0] req_unmask_exit_higher_prio_reqs;
+    wire [REQ_WIDTH-1 : 0] req_unmask_exist_higher_prio_reqs;
 
     wire [REQ_WIDTH-1 : 0] req_mask_grant;
-    wire [REQ_WIDTH-1 : 0] req_mask_exit_higher_prio_reqs;
+    wire [REQ_WIDTH-1 : 0] req_mask_exist_higher_prio_reqs;
 
     SP_Arbiter #(
         .REQ_WIDTH(REQ_WIDTH)
     ) sp_arb_req_unmask (
         .i_req(i_req),
         .o_grant(req_unmask_grant),
-        .o_exit_higher_prio_reqs(req_unmask_exit_higher_prio_reqs)
+        .o_exist_higher_prio_reqs(req_unmask_exist_higher_prio_reqs)
     );
     
     
@@ -88,7 +88,7 @@ module RR_Arbiter #(
     ) sp_arb_req_mask (
         .i_req(req_masked),
         .o_grant(req_mask_grant),
-        .o_exit_higher_prio_reqs(req_mask_exit_higher_prio_reqs)
+        .o_exist_higher_prio_reqs(req_mask_exist_higher_prio_reqs)
     );
     
 
@@ -97,7 +97,7 @@ module RR_Arbiter #(
             mask <= {REQ_WIDTH{1'b0}};
         end
         else begin
-            mask <= (req_masked == {REQ_WIDTH{1'b0}}) ? req_unmask_exit_higher_prio_reqs : req_mask_exit_higher_prio_reqs;
+            mask <= (req_masked == {REQ_WIDTH{1'b0}}) ? req_unmask_exist_higher_prio_reqs : req_mask_exist_higher_prio_reqs;
         end
     end
 
